@@ -36,31 +36,36 @@ public class MyMapData
     }
 
     //Getter
-    public int[] GetValues(int stageNum)
+    public int GetMaxStageNum()
     {
-        return myMapDataArray[stageNum].values;
+        return myMapDataArray.Length;
     }
-    public int GetWidth(int stageNum)
+    public int[] GetValues(int stageIndex)
     {
-        return myMapDataArray[stageNum].mapWidth;
+        return myMapDataArray[stageIndex].values;
     }
-    public int GetHeight(int stageNum)
+    public int GetWidth(int stageIndex)
     {
-        return myMapDataArray[stageNum].mapHeight;
+        return myMapDataArray[stageIndex].mapWidth;
     }
-    public int GetLength(int stageNum)
+    public int GetHeight(int stageIndex)
     {
-        return GetWidth(stageNum)*GetHeight(stageNum);
+        return myMapDataArray[stageIndex].mapHeight;
     }
-    public int GetCellValue(int stageNum, int index)
+    public int GetLength(int stageIndex)
     {
-        return myMapDataArray[stageNum].values[index];
+        return GetWidth(stageIndex)*GetHeight(stageIndex);
     }
-    public int GetCellValue(int stageNum, int x, int y) //Excelに書き込まれた値がそのまま返ってくる
+
+    public int GetCellValue(int stageIndex, int index)
     {
-        int stageWidht = myMapDataArray[stageNum].mapWidth;
-        //return myMapDataArray[stageNum].values[y * stageWidht + x];
-        return GetCellValue(stageNum, y * stageWidht + x);
+        return myMapDataArray[stageIndex].values[index];
+    }
+    public int GetCellValue(int stageIndex, int x, int y) //Excelに書き込まれた値がそのまま返ってくる
+    {
+        int stageWidht = myMapDataArray[stageIndex].mapWidth;
+        //return myMapDataArray[stageIndex].values[y * stageWidht + x];
+        return GetCellValue(stageIndex, y * stageWidht + x);
     }
 
 

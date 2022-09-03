@@ -14,25 +14,23 @@ public class MapMGR : MonoBehaviour
     [SerializeField] Tilemap tilemap;
     [SerializeField] StageTileArray[] tileArray;
 
-    Map map;
-
 
     int outOfStageQ = 10; //マップの外にタイルを何枚はみ出して張るかを決める
 
-    //仮置き
-    int stageNum = 0;
+    int entityNum = 2; //マップに配置されうるものの種類
+
+    int maxStageNum = 2; //とりあえず2にしておく
+
+    string mapDataPath = "JSON/mapData";
+
+    Map map;
 
 
-    public void SetupMap() //これをGameManagerから呼ぶ
+    public void Init(int stageIndex) //これをGameManagerから呼ぶ
     {
-        Debug.Log($"SetupMapを実行します");
+        Debug.Log($"MapMGRのInitを実行します");
 
-        //ここで想定することは
-        //mapにRMIと同様のインスタンスがはいって欲しい
-        //つまり、数字だけが入っているマス目とシーンに置くゲームオブジェクトにアタッチするMGRスクリプトが入っているマス目がメンバとして用意されたインスタンス
-
-
-        InitMap(1,0);
+        InitMap(stageIndex);
 
 
         //PlaceSpawnPoint();
@@ -45,54 +43,21 @@ public class MapMGR : MonoBehaviour
 
     }
 
-    private void InitMap(int maxStageNum,int stageNum)
+    private void InitMap(int stageIndex)
     {
-        MapData mapData = new MapData(maxStageNum,"JSON/mapData");
-        map = new Map(GameManager.instance.wallID, mapData.GetWidth(stageNum), mapData.GetHeight(stageNum), 1); //とりあえずTowerMGRだけなので最後の引数は1にしておく
+        MapData mapData = new MapData(maxStageNum,mapDataPath);
+        map = new Map(GameManager.instance.wallID, mapData.GetWidth(stageIndex), mapData.GetHeight(stageIndex), entityNum,stageIndex); //とりあえずTowerMGRだけなので最後の引数は1にしておく
 
-        int[] values = new int[mapData.GetWidth(stageNum) * mapData.GetHeight(stageNum)];
-
-        for (int i = 0; i < mapData.GetLength(stageNum); i++)
+        for (int i = 0; i < mapData.GetLength(stageIndex); i++)
         {
-            Debug.Log($"GetCellValue(stageNum,{i}):{mapData.GetCellValue(stageNum, i)}");
-             map.SetValue(i, mapData.GetCellValue(stageNum,i));
+           // Debug.Log($"GetCellValue(stageIndex,{i}):{mapData.GetCellValue(stageIndex, i)}");
+
+            map.SetValue(i, mapData.GetCellValue(stageIndex,i));
 
         }
-
-
-        string debugMapValue = "";
-
-        for (int i = 0; i < map.GetLength(); i++)
-        {
-            debugMapValue += map.GetValue(i).ToString() +", ";
-        }
-        Debug.Log(debugMapValue);
-
 
     }
 
-    private void ReSetupMap() //MakeTheFirstRoadで失敗したときに呼ばれる
-    {
-        for (int x = 0; x < map.Width; x++)
-        {
-            for (int y = 0; y < map.Height; y++)
-            {
-                if (map.GetValue(x, y) % GameManager.instance.groundID == 0) //MakeTheFirstRoadで作った道を壁に戻す
-                {
-                    map.SetValue(x, y, GameManager.instance.wallID); //直接値を代入していることに注意
-                }
-            }
-        }
-
-
-
-
-        //Debug.Log($"numOfFristRoadCounterを{GetNumOfFristRoad()}に初期化しました");
-
-        RenderMap();
-
-        //SetupMap()に比べて、PlaceCastle()とPlaceTower()がない
-    }
     private void RenderMap()
     {
         //マップをクリアする（重複しないようにする）
@@ -123,36 +88,14 @@ public class MapMGR : MonoBehaviour
 
     private void SetTileAccordingToValues(int x, int y)
     {
-        //if (0 <= y && y < map.Height && 0 <= x && x < map.Width)
-        //{
-        //    // 1 = タイルあり、0 = タイルなし
-        //    if (map.GetValue(x, y) % GameManager.instance.wallID == 0)
-        //    {
-        //        if (CalculateTileType(x, y) < 47) //周りがすべて壁のタイルは3種類ある
-        //        {
-        //            tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[CalculateTileType(x, y)]);
-        //        }
-        //        else
-        //        {
-        //            tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]);
-        //        }
-        //        //Debug.Log($"タイルを{x},{y}に敷き詰めました");
-        //    }
-        //    else if (map.GetValue(x, y) % GameManager.instance.groundID == 0)
-        //    {
-        //        tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[UnityEngine.Random.Range(50, 52 + 1)]);
-        //    }
+        System.Func<long, bool> IsWall;
 
-        //}
-        //else //mapの領域外
-        //{
-        //    tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]); //全方向が壁のタイルを張る(3枚)
-        //}
+        IsWall = (mapValue) => { return mapValue < 0 ? true : false; };
 
         //mapの領域外
-        if (0 > y || y >= map.Height || 0 > x || x >= map.Width)
+        if (0 > y || y > map.Height-1 || 0 > x || x > map.Width-1)
         {
-            tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]); //全方向が壁のタイルを張る(3枚)
+            tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[map.GetStageIndex()].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]); //全方向が壁のタイルを張る(3枚)
             Debug.Log($"壁のタイルをタイルを{x},{y}に敷き詰めました（領域外）");
 
             return;
@@ -161,23 +104,23 @@ public class MapMGR : MonoBehaviour
         //負の数なら壁、正の数なら地面
         if (map.GetValue(x, y) < 0)
         {
-            if (CalculateTileType(x, y) < 47) //周りがすべて壁のタイルは3種類ある
+            if (MapFunction.CalculateTileType(x, y,map,IsWall) < 47) //周りがすべて壁のタイルは3種類ある
             {
                 //少なくとも一つの方向は地面のタイルである壁のタイル
-                tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[CalculateTileType(x, y)]);
-                Debug.Log($"GetValue:{map.GetValue(x, y)}、地面に接する壁、({x},{y})、タイル番号：{CalculateTileType(x, y)}");
+                tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[map.GetStageIndex()].stageTileArray[MapFunction.CalculateTileType(x, y, map, IsWall)]);
+                Debug.Log($"GetValue:{map.GetValue(x, y)}、地面に接する壁、({x},{y})、タイル番号：{MapFunction.CalculateTileType(x, y, map, IsWall)}");
             }
             else
             {
                 //周りがすべて壁のタイル
-                tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]);
+                tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[map.GetStageIndex()].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]);
                 Debug.Log($"壁に囲まれた壁、({x},{y})、タイル番号：47から49の乱数");
 
             }
         }
         else if (map.GetValue(x, y) > 0)
         {
-            tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[stageNum].stageTileArray[UnityEngine.Random.Range(50, 52 + 1)]);
+            tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[map.GetStageIndex()].stageTileArray[UnityEngine.Random.Range(50, 52 + 1)]);
             Debug.Log($"地面、({x},{y})、タイル番号：50から52の乱数");
 
 
@@ -189,7 +132,81 @@ public class MapMGR : MonoBehaviour
 
 
     }
-    private int CalculateTileType(int x, int y)
+
+
+}
+
+
+public class Map : EntityMap<global::Entity>
+{
+    //MapMGRに沿うように改良されたEntityMap
+
+    int _stageIndex;
+
+    //コンストラクタ
+    public Map(int initValue, int width, int height, int entityNum, int stageIndex) : base(initValue, width, height, entityNum)
+    {
+        _stageIndex = stageIndex;
+    }
+
+    //Getter
+    public int GetStageIndex()
+    {
+        return _stageIndex;
+    }
+
+    //Setter
+
+    public void AddBrickYard(Vector2Int vector, int entityIndex, BrickYard entity)
+    {
+        AddEntity(vector.x, vector.y, entityIndex, entity);
+    }
+    public void RemoveBrickYard(Vector2Int vector, int entityIndex, BrickYard entity)
+    {
+        RemoveEntity(vector.x, vector.y, entityIndex, entity);
+    }
+
+    public void AddP1SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
+    {
+        AddEntity(vector.x, vector.y, entityIndex, entity);
+    }
+    public void AddP2SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
+    {
+        AddEntity(vector.x, vector.y, entityIndex, entity);
+    }
+
+    public void RemoveP1SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
+    {
+        RemoveEntity(vector.x, vector.y, entityIndex, entity);
+    }
+    public void RemoveP2SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
+    {
+        RemoveEntity(vector.x, vector.y, entityIndex, entity);
+    }
+
+    public void AddP1Tower(Vector2Int vector, int entityIndex, Tower entity)
+    {
+        AddEntity(vector.x, vector.y, entityIndex, entity);
+    }
+    public void AddP2Tower(Vector2Int vector, int entityIndex, Tower entity)
+    {
+        AddEntity(vector.x, vector.y, entityIndex, entity);
+    }
+    public void RemoveP1Tower(Vector2Int vector, int entityIndex, Tower entity)
+    {
+        RemoveEntity(vector.x, vector.y, entityIndex, entity);
+    }
+    public void RemoveP2Tower(Vector2Int vector, int entityIndex, Tower entity)
+    {
+        RemoveEntity(vector.x, vector.y, entityIndex, entity);
+    }
+}
+
+public static class MapFunction
+{
+    //MapをTilemapにレンダリングするときに使用するクラス
+
+    public static int CalculateTileType(int x, int y, Map map, System.Func<long,bool>  IsWall)
     {
         bool upIsWall = false;
         bool leftIsWall = false;
@@ -201,14 +218,9 @@ public class MapMGR : MonoBehaviour
         int uprightWallValue = 0;
         int binarySub;
 
-        if (IsOutRangeOfMap(x, y))
-        {
-            Debug.LogError($"CalculateTileType({x},{y})の引数でmapの範囲外が指定されました");
-            return -100;
-        }
 
         //そもそもgroundIDの時は0を返すようにする（これはRenderMapでは使わない）
-        if ( !IsWall(map.GetValue(x, y)))
+        if (!IsWall(map.GetValue(x, y)))
         {
             return 0;
         }
@@ -218,23 +230,23 @@ public class MapMGR : MonoBehaviour
             upIsWall = true;
         }
 
-        if (x == 0 ||  IsWall(map.GetValue(x - 1, y)))
+        if (x == 0 || IsWall(map.GetValue(x - 1, y)))
         {
             leftIsWall = true;
         }
 
-        if (y == 0 ||  IsWall(map.GetValue(x, y - 1)))
+        if (y == 0 || IsWall(map.GetValue(x, y - 1)))
         {
             downIsWall = true;
         }
 
-        if (x == map.Width - 1 ||  IsWall(map.GetValue(x + 1, y)))
+        if (x == map.Width - 1 || IsWall(map.GetValue(x + 1, y)))
         {
             rightIsWall = true;
         }
 
 
-        if (x == 0 || y == map.Height - 1 ||  IsWall(map.GetValue(x - 1, y + 1))) //この4つの場合分けは4隅を調べればよいので、xだけの判定で十分
+        if (x == 0 || y == map.Height - 1 || IsWall(map.GetValue(x - 1, y + 1))) //この4つの場合分けは4隅を調べればよいので、xだけの判定で十分
         {
             upleftWallValue = 1;
         }
@@ -249,7 +261,7 @@ public class MapMGR : MonoBehaviour
             downrightWallValue = 1;
         }
 
-        if (x == map.Width - 1 || y == map.Height - 1 ||IsWall(map.GetValue(x + 1, y + 1)))
+        if (x == map.Width - 1 || y == map.Height - 1 || IsWall(map.GetValue(x + 1, y + 1)))
         {
             uprightWallValue = 1;
         }
@@ -354,87 +366,6 @@ public class MapMGR : MonoBehaviour
         Debug.LogError($"CalculateTileNum({y} ,{x})に失敗しました");
         return -100;
 
-
-        //ローカル関数
-        bool IsWall(long mapValue)
-        {
-            return mapValue < 0 ? true : false;
-        }
     }
-    private bool IsOutRangeOfMap(int x, int y)
-    {
-        if (x < 0 || y < 0 || x > map.Width - 1 || y > map.Height - 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-
 
 }
-
-public class Map : EntityMap<global::Entity>
-{
-    //数字に加えてゲームオブジェクトにアタッチされたスクリプトのインスタンスも格納できるマップ
-
-
-    List<Entity>[][] entityMaps;
-
-    //コンストラクタ
-    public Map(int initValue, int width, int height, int entityNum) : base(initValue, width, height, entityNum)
-    {
-        entityMaps = new List<Entity>[entityNum][];
-    }
-
-
-    //Setter
-
-    public void AddBrickYard(Vector2Int vector, int entityIndex, BrickYard entity)
-    {
-        AddEntity(vector.x, vector.y, entityIndex, entity);
-    }
-    public void RemoveBrickYard(Vector2Int vector, int entityIndex, BrickYard entity)
-    {
-        RemoveEntity(vector.x, vector.y, entityIndex, entity);
-    }
-
-    public void AddP1SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
-    {
-        AddEntity(vector.x, vector.y, entityIndex, entity);
-    }
-    public void AddP2SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
-    {
-        AddEntity(vector.x, vector.y, entityIndex, entity);
-    }
-
-    public void RemoveP1SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
-    {
-        RemoveEntity(vector.x, vector.y, entityIndex, entity);
-    }
-    public void RemoveP2SpawnPoint(Vector2Int vector, int entityIndex, SpawnPoint entity)
-    {
-        RemoveEntity(vector.x, vector.y, entityIndex, entity);
-    }
-
-    public void AddP1Tower(Vector2Int vector, int entityIndex, Tower entity)
-    {
-        AddEntity(vector.x, vector.y, entityIndex, entity);
-    }
-    public void AddP2Tower(Vector2Int vector, int entityIndex, Tower entity)
-    {
-        AddEntity(vector.x, vector.y, entityIndex, entity);
-    }
-    public void RemoveP1Tower(Vector2Int vector, int entityIndex, Tower entity)
-    {
-        RemoveEntity(vector.x, vector.y, entityIndex, entity);
-    }
-    public void RemoveP2Tower(Vector2Int vector, int entityIndex, Tower entity)
-    {
-        RemoveEntity(vector.x, vector.y, entityIndex, entity);
-    }
-}
-

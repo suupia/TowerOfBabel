@@ -13,6 +13,6 @@ public class BattleMGR : MonoBehaviour
     public void EnableInit()
     {
         Debug.Log($"BattleMGRのEnableInitを実行します");
-        mapMGR.SetupMap();
+        mapMGR.Init(0);
     }
 }

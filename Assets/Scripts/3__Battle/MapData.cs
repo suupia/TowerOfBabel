@@ -30,10 +30,10 @@ public class MapData : MyMapData
     }
 
 
-    public int GetIDFromResources(int stageNum, int x, int y)
+    public int GetIDFromResources(int stageIndex, int x, int y)
     {
-        int stageWidht = myMapDataArray[stageNum].mapWidth;
-        int cellValue = myMapDataArray[stageNum].values[y * stageWidht + x];
+        int stageWidht = myMapDataArray[stageIndex].mapWidth;
+        int cellValue = myMapDataArray[stageIndex].values[y * stageWidht + x];
 
         if (cellValue < 0)
         {
@@ -48,10 +48,10 @@ public class MapData : MyMapData
         return id;
     }
 
-    public int GetIdentifyIDFromResources(int stageNum, int x, int y) //numToIdentifyRankで区切られたIdentifyIDを取得する(今は1の位の値を返す)
+    public int GetIdentifyIDFromResources(int stageIndex, int x, int y) //numToIdentifyRankで区切られたIdentifyIDを取得する(今は1の位の値を返す)
     {
-        int stageWidht = myMapDataArray[stageNum].mapWidth;
-        int cellValue = myMapDataArray[stageNum].values[y * stageWidht + x];
+        int stageWidht = myMapDataArray[stageIndex].mapWidth;
+        int cellValue = myMapDataArray[stageIndex].values[y * stageWidht + x];
 
         if (cellValue < 0)
         {
