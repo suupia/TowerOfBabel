@@ -133,12 +133,12 @@ GameObject:
   m_Component:
   - component: {fileID: 71990099}
   m_Layer: 0
-  m_Name: 2__SettingUp
+  m_Name: 2__Setup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &71990099
 Transform:
   m_ObjectHideFlags: 0
@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 140158201}
   - component: {fileID: 140158202}
   m_Layer: 0
-  m_Name: SettingUp
+  m_Name: Setup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,6 +199,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8520068c9fc9a48a8085ed5099d29f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &286708730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 286708731}
+  m_Layer: 0
+  m_Name: MapMGR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &286708731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286708730}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1495137204}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &412379955
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +277,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &511145050
 Transform:
   m_ObjectHideFlags: 0
@@ -392,7 +423,7 @@ GameObject:
   - component: {fileID: 565843585}
   - component: {fileID: 565843586}
   m_Layer: 0
-  m_Name: Battling
+  m_Name: Battle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -595,7 +626,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1051465252
 Transform:
   m_ObjectHideFlags: 0
@@ -657,9 +688,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   __Title: {fileID: 1330846048}
-  __SettingUp: {fileID: 140158200}
-  __Battling: {fileID: 565843584}
+  __Setup: {fileID: 0}
+  __Battle: {fileID: 0}
   __Result: {fileID: 914834272}
+  titleMGR: {fileID: 0}
+  setupMGR: {fileID: 0}
+  battleMGR: {fileID: 0}
+  resultMGR: {fileID: 0}
   _state: 1
 --- !u!1 &1330846048
 GameObject:
@@ -715,12 +750,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1495137204}
   m_Layer: 0
-  m_Name: 3__Battling
+  m_Name: 3__Battle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1495137204
 Transform:
   m_ObjectHideFlags: 0
@@ -734,6 +769,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 565843585}
+  - {fileID: 286708731}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
