@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BattleMGR : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public MapMGR mapMGR;
+    private void OnEnable()
     {
-        
+        EnableInit();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void EnableInit()
     {
-        
+        Debug.Log($"BattleMGRのEnableInitを実行します");
+        mapMGR.SetupMap();
     }
 }

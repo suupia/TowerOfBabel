@@ -19,13 +19,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ResultMGR resultMGR;
 
     //ID
-    public readonly int wallID;
-    public readonly int groundID;
-    public readonly int p1SpawnPoint;
-    public readonly int p2SpawnPoint;
-    public readonly int p1Tower;
-    public readonly int p2Tower;
+    public readonly int wallID = 5;
+    public readonly int groundID = 7;
+    public readonly int p1SpawnPoint = 11;
+    public readonly int p2SpawnPoint = 13;
+    public readonly int p1Tower = 17;
+    public readonly int p2Tower = 19;
     public readonly int brickYard;
+    public readonly int p1Character = 2;
+    public readonly int p2Character = 3;
 
 
 
@@ -63,9 +65,17 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //デバッグ
-        SetupState();
+        BattleState();
+        Test();
     }
+    public void Test()
+    {
+        //string data = Resources.Load<TextAsset>(path + i).ToString(); //pathの例："JSON/posData" 
+        //myMapDataArray[i] = JsonUtility.FromJson<MyMapJSONData>(data);
 
+        //Debug.Log($"stageNum;{i}");
+        //Debug.Log(string.Join(",", myMapDataArray[i].values));
+    }
     public void TitleState()
     {
 
@@ -78,7 +88,7 @@ public class GameManager : MonoBehaviour
         _state = State.SettingUp;
     }
 
-    public void BattlingState()
+    public void BattleState()
     {
         Debug.Log($"_stateをBattlingに移行します");
 

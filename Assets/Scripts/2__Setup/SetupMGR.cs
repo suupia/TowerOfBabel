@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetupMGR : MonoBehaviour
 {
-    public MapMGR mapMGR;
+
 
     private void OnEnable()
     {
@@ -13,6 +13,5 @@ public class SetupMGR : MonoBehaviour
 
     public void EnableInit()
     {
-
     }
 }

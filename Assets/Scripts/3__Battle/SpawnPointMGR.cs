@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerMGR : MonoBehaviour
+public class SpawnPointMGR : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -17,7 +17,7 @@ public class TowerMGR : MonoBehaviour
     }
 }
 
-public class Tower: Entity
+public class SpawnPoint : Entity
 {
 
 }

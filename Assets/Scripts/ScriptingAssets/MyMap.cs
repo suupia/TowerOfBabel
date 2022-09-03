@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NumericMapData
+public class NumericMap
 {
     //数字だけを格納することができるマップ
     int _width;
@@ -14,7 +14,7 @@ public class NumericMapData
     //データが存在する領域、端の領域、それ以外　の３つの領域がある
 
     //コンストラクタ
-    public NumericMapData(int initValue, int width, int height)
+    public NumericMap(int initValue, int width, int height)
     {
         if (width <= 0 || height <= 0)
         {
@@ -37,6 +37,15 @@ public class NumericMapData
     {
         return _values.Length;
     }
+    public long GetValue(int index)
+    {
+        if (index < 0 || index > _values.Length)
+        {
+            Debug.LogError("領域外の値を習得しようとしました");
+            return _outOfRangeValue;
+        }
+        return _values[index];
+    }
     public long GetValue(int x, int y)
     {
         if (IsOutOfEdge(x, y))
@@ -58,17 +67,18 @@ public class NumericMapData
     {
         return GetValue(vector.x, vector.y);
     }
-    public long GetValue(int index)
-    {
-        if (index < 0 || index > _values.Length)
-        {
-            Debug.LogError("領域外の値を習得しようとしました");
-            return _outOfRangeValue;
-        }
-        return _values[index];
-    }
+
 
     //Setter
+    public void SetValue(int index , int value)
+    {
+        if (index <0 || index > _values.Length-1)
+        {
+            Debug.LogError("領域外の値を習得しようとしました");
+            return;
+        }
+        _values[index] = value;
+    }
     public void SetValue(int x, int y, int value)
     {
         if (IsOutOfEdge(x, y))
@@ -165,24 +175,22 @@ public class NumericMapData
         }
     }
 }
-public class EntityMapData<Entity> : NumericMapData
+public class EntityMap<EntityType> : NumericMap
 {
     //数字に加えてゲームオブジェクトにアタッチされたスクリプトのインスタンスも格納できるマップ
 
-    List<Entity>[] xxxMGRMap;
-    List<List<Entity[]>> xxxMGRMapList;
 
-    List<Entity>[][] entityMaps;
+    List<EntityType>[][] entityMaps;
 
     //コンストラクタ
-    public EntityMapData(int initValue, int width, int height, int entityNum) : base(initValue, width, height)
+    public EntityMap(int initValue, int width, int height, int entityNum) : base(initValue, width, height)
     {
-        entityMaps = new List<Entity>[entityNum][];
+        entityMaps = new List<EntityType>[entityNum][];
     }
 
 
     //Getter
-    public List<Entity> GetEntityList(int x, int y, int entityIndex)
+    public List<EntityType> GetEntityList(int x, int y, int entityIndex)
     {
         if (IsOutOfDataRange(x, y))
         {
@@ -191,11 +199,11 @@ public class EntityMapData<Entity> : NumericMapData
         }
         return entityMaps[entityIndex][ToSubscript(x, y)];
     }
-    public List<Entity> GetEntityList(Vector2Int vetor, int entityIndex)
+    public List<EntityType> GetEntityList(Vector2Int vetor, int entityIndex)
     {
         return GetEntityList(vetor.x, vetor.y, entityIndex);
     }
-    public List<Entity> GetEntityList(int index, int entityIndex)
+    public List<EntityType> GetEntityList(int index, int entityIndex)
     {
         if (index < 0 || index > GetLength())
         {
@@ -206,7 +214,7 @@ public class EntityMapData<Entity> : NumericMapData
     }
 
     //Setter
-    public void AddEntity(int x, int y, int entityIndex, Entity entity)
+    public void AddEntity(int x, int y, int entityIndex, EntityType entity)
     {
         if (IsOutOfDataRange(x, y))
         {
@@ -215,11 +223,11 @@ public class EntityMapData<Entity> : NumericMapData
         }
         entityMaps[entityIndex][ToSubscript(x, y)].Add(entity);
     }
-    public void AddEntity(Vector2Int vector, int entityIndex, Entity entity)
+    public void AddEntity(Vector2Int vector, int entityIndex, EntityType entity)
     {
         AddEntity(vector.x, vector.y, entityIndex, entity);
     }
-    public void RemoveEntity(int x, int y, int entityIndex, Entity entity)
+    public void RemoveEntity(int x, int y, int entityIndex, EntityType entity)
     {
         if (IsOutOfDataRange(x, y))
         {
@@ -228,7 +236,7 @@ public class EntityMapData<Entity> : NumericMapData
         }
         entityMaps[entityIndex][ToSubscript(x, y)].Remove(entity);
     }
-    public void RemoveUnit(Vector2Int vector, int entityIndex, Entity entity)
+    public void RemoveUnit(Vector2Int vector, int entityIndex, EntityType entity)
     {
         RemoveEntity(vector.x, vector.y, entityIndex, entity);
     }
