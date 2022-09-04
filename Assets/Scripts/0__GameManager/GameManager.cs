@@ -19,15 +19,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ResultMGR resultMGR;
 
     //ID
-    public readonly int wallID = 5;
-    public readonly int groundID = 7;
-    public readonly int p1SpawnPoint = 11;
-    public readonly int p2SpawnPoint = 13;
-    public readonly int p1Tower = 17;
-    public readonly int p2Tower = 19;
-    public readonly int brickYard;
-    public readonly int p1Character = 2;
-    public readonly int p2Character = 3;
+    public readonly int wallID_m1 = -1;
+    public readonly int groundID_p1 = 1;
+    public readonly int brickYardID = 5;
+    public readonly int p1SpawnPointID = 11;
+    public readonly int p2SpawnPointID = 13;
+    public readonly int p1TowerID = 17;
+    public readonly int p2TowerID = 19;
+    public readonly int p1CharacterID = 2;
+    public readonly int p2CharacterID = 3;
 
 
 
@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         Battling,
         Result
     }
+
     [SerializeField] private State _state; //デバッグ用
     public State state
     {

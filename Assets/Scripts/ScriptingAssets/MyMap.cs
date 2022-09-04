@@ -186,6 +186,14 @@ public class EntityMap<EntityType> : NumericMap
     public EntityMap(int initValue, int width, int height, int entityNum) : base(initValue, width, height)
     {
         entityMaps = new List<EntityType>[entityNum][];
+        for (int i = 0; i <entityNum;i++)
+        {
+            entityMaps[i] = new List<EntityType>[GetLength()];
+            for(int j = 0; j <GetLength(); j++)
+            {
+                entityMaps[i][j] = new List<EntityType>();
+            }
+        }
     }
 
 
