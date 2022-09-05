@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 92818265695093600}
   - component: {fileID: 757980858403601067}
-  - component: {fileID: -2102197979213531208}
+  - component: {fileID: -3852321087641389028}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1636384917
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-2102197979213531208
+--- !u!114 &-3852321087641389028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,6 +94,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7506700713716196524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a781a9c1e5ce584696829af0f5ebd2a, type: 3}
+  m_Script: {fileID: 11500000, guid: c1a30fbd20ca4034a8ecb5937e86ed83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -14,6 +14,7 @@ public class MapMGR : MonoBehaviour
     [SerializeField] Tilemap tilemap;
     [SerializeField] StageTileArray[] tileArray;
 
+    [SerializeField] GameObject entityParent;
     [SerializeField] GameObject brickYardPrefab;
     [SerializeField] GameObject SpawnPointPrefab;
     [SerializeField] GameObject towerPrefab;
@@ -61,9 +62,9 @@ public class MapMGR : MonoBehaviour
         //mapValueからIDを計算する計算式
         IsDesiredID = (mapValue,desiredID) => { return Mathf.Abs(mapValue) %  desiredID == 0 ? true : false; };
 
-        for (int y = 0; y < map.Height; y++)
+        for (int y = 0; y < map.GetHeight(); y++)
         {
-            for(int x = 0; x < map.Width; x++)
+            for(int x = 0; x < map.GetWidth(); x++)
             {
                 if (IsDesiredID(map.GetValue(x,y),GameManager.instance.brickYardID))
                 {
@@ -95,7 +96,7 @@ public class MapMGR : MonoBehaviour
     {
         Vector2Int pos = new Vector2Int(x,y);
 
-        GameObject brickYardGO = Instantiate(brickYardPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+        GameObject brickYardGO = Instantiate(brickYardPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity,entityParent.transform);
         BrickYardMGR brickYardMGR = brickYardGO.GetComponent<BrickYardMGR>(); 
 
         map.AddBrickYardMGR(pos,brickYardMGR);
@@ -106,7 +107,7 @@ public class MapMGR : MonoBehaviour
     {
         Vector2Int pos = new Vector2Int(x, y);
 
-        GameObject spwanPointGO = Instantiate(SpawnPointPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+        GameObject spwanPointGO = Instantiate(SpawnPointPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity, entityParent.transform);
         SpawnPointMGR spawnPointMGR = spwanPointGO.GetComponent<SpawnPointMGR>();
 
         if (isP1)
@@ -123,7 +124,7 @@ public class MapMGR : MonoBehaviour
     {
         Vector2Int pos = new Vector2Int(x, y);
 
-        GameObject towerGO = Instantiate(towerPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+        GameObject towerGO = Instantiate(towerPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity, entityParent.transform);
         TowerMGR towerMGR = towerGO.GetComponent<TowerMGR>();
 
         if (isP1)
@@ -143,9 +144,9 @@ public class MapMGR : MonoBehaviour
         //マップをクリアする（重複しないようにする）
         tilemap.ClearAllTiles();
 
-        for (int y = -outOfStageQ; y < map.Height + outOfStageQ; y++)
+        for (int y = -outOfStageQ; y < map.GetHeight() + outOfStageQ; y++)
         {
-            for (int x = -outOfStageQ; x < map.Width + outOfStageQ; x++)
+            for (int x = -outOfStageQ; x < map.GetWidth() + outOfStageQ; x++)
             {
                 SetTileAccordingToValues(x, y);
             }
@@ -161,7 +162,7 @@ public class MapMGR : MonoBehaviour
         IsWall = (mapValue) => { return mapValue < 0 ? true : false; };
 
         //mapの領域外
-        if (0 > y || y > map.Height - 1 || 0 > x || x > map.Width - 1)
+        if (0 > y || y > map.GetHeight() - 1 || 0 > x || x > map.GetWidth() - 1)
         {
             tilemap.SetTile(new Vector3Int(x, y, 0), tileArray[map.GetStageIndex()].stageTileArray[UnityEngine.Random.Range(47, 49 + 1)]); //全方向が壁のタイルを張る(3枚)
             //Debug.Log($"壁のタイルをタイルを{x},{y}に敷き詰めました（領域外）");
@@ -198,10 +199,20 @@ public class MapMGR : MonoBehaviour
             Debug.LogError($"mapに予期せぬ値が入っています {map.GetValue(x, y)}");
         }
 
-
     }
 
-
+    //Getter
+    public int GetMapWidth()
+    {
+        return map.GetWidth();
+    }
+    public int GetMapHeight()
+    {
+        return map.GetHeight();
+    }
+    public long GetMapValue(Vector2Int vector){
+        return map.GetValue(vector);
+    }
 }
 
 
@@ -304,7 +315,7 @@ public static class MapFunction
             return 0;
         }
 
-        if (y == map.Height - 1 || IsWall(map.GetValue(x, y + 1))) //左側の条件式の方が先に判定されるので、mapの範囲外にGetValueすることはない（と思う）
+        if (y == map.GetHeight() - 1 || IsWall(map.GetValue(x, y + 1))) //左側の条件式の方が先に判定されるので、mapの範囲外にGetValueすることはない（と思う）
         {
             upIsWall = true;
         }
@@ -319,13 +330,13 @@ public static class MapFunction
             downIsWall = true;
         }
 
-        if (x == map.Width - 1 || IsWall(map.GetValue(x + 1, y)))
+        if (x == map.GetWidth() - 1 || IsWall(map.GetValue(x + 1, y)))
         {
             rightIsWall = true;
         }
 
 
-        if (x == 0 || y == map.Height - 1 || IsWall(map.GetValue(x - 1, y + 1))) //この4つの場合分けは4隅を調べればよいので、xだけの判定で十分
+        if (x == 0 || y == map.GetHeight() - 1 || IsWall(map.GetValue(x - 1, y + 1))) //この4つの場合分けは4隅を調べればよいので、xだけの判定で十分
         {
             upleftWallValue = 1;
         }
@@ -335,12 +346,12 @@ public static class MapFunction
             downleftWallValue = 1;
         }
 
-        if (x == map.Width - 1 || y == 0 || IsWall(map.GetValue(x + 1, y - 1)))
+        if (x == map.GetWidth() - 1 || y == 0 || IsWall(map.GetValue(x + 1, y - 1)))
         {
             downrightWallValue = 1;
         }
 
-        if (x == map.Width - 1 || y == map.Height - 1 || IsWall(map.GetValue(x + 1, y + 1)))
+        if (x == map.GetWidth() - 1 || y == map.GetHeight() - 1 || IsWall(map.GetValue(x + 1, y + 1)))
         {
             uprightWallValue = 1;
         }

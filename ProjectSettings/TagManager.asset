@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tilemap
+    uniqueID: 18339301
+    locked: 0
+  - name: GridGuide
+    uniqueID: 1607636005
+    locked: 0
+  - name: Entity
+    uniqueID: 2658582379
+    locked: 0
+  - name: Unit
+    uniqueID: 1297154351
+    locked: 0

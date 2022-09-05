@@ -13,10 +13,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject __Result;
 
     //スクリプト
-    [SerializeField] private TitleMGR titleMGR;
-    [SerializeField] private SetupMGR setupMGR;
-    [SerializeField] private BattleMGR battleMGR;
-    [SerializeField] private ResultMGR resultMGR;
+    [SerializeField] public TitleMGR titleMGR;
+    [SerializeField] public SetupMGR setupMGR;
+    [SerializeField] public BattleMGR battleMGR;
+    [SerializeField] public ResultMGR resultMGR;
 
     //ID
     public readonly int wallID_m1 = -1;

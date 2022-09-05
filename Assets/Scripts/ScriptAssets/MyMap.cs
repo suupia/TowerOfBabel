@@ -28,11 +28,10 @@ public class NumericMap
         FillAll(initValue);
     }
 
-    //プロパティ
-    public int Width { get { return _width; } }
-    public int Height { get { return _height; } }
 
     //Getter
+    public int GetWidth() { return _width; }
+    public int GetHeight() { return _height; }
     public int GetLength()
     {
         return _values.Length;

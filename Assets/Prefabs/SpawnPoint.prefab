@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 92818265695093600}
   - component: {fileID: 757980858403601067}
-  - component: {fileID: -2102197979213531208}
+  - component: {fileID: 2403202805163311390}
   m_Layer: 0
   m_Name: SpawnPoint
   m_TagString: Untagged
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1636384917
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.042452812, g: 1, b: 0.81857324, a: 1}
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-2102197979213531208
+--- !u!114 &2403202805163311390
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7506700713716196524}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a781a9c1e5ce584696829af0f5ebd2a, type: 3}
+  m_Script: {fileID: 11500000, guid: ae2e81d1ae3c352469908b5724f4aa49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitPrefab: {fileID: 1866499172305115529, guid: 9f3c243d57634564e8ce1a0f5d552dbf, type: 3}
