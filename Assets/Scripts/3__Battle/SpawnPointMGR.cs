@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnPointMGR : MonoBehaviour
+public class SpawnPointMGR : EntityMGR
 {
     // Start is called before the first frame update
     void Start()
@@ -17,7 +17,3 @@ public class SpawnPointMGR : MonoBehaviour
     }
 }
 
-public class SpawnPoint : Entity
-{
-
-}

@@ -15,7 +15,7 @@ public class MapMGR : MonoBehaviour
     [SerializeField] StageTileArray[] tileArray;
 
     [SerializeField] GameObject brickYardPrefab;
-    [SerializeField] GameObject spawnPointPrefab;
+    [SerializeField] GameObject SpawnPointPrefab;
     [SerializeField] GameObject towerPrefab;
 
 
@@ -70,12 +70,12 @@ public class MapMGR : MonoBehaviour
                     PlaceBrickYard(x, y);
                 }else if (IsDesiredID(map.GetValue(x, y), GameManager.instance.p1SpawnPointID))
                 {
-                    PlaceSpawnPoint(x, y,true);
+                    PlaceSpawnPointMGR(x, y,true);
 
                 }
                 else if (IsDesiredID(map.GetValue(x, y), GameManager.instance.p2SpawnPointID))
                 {
-                    PlaceSpawnPoint(x, y,false);
+                    PlaceSpawnPointMGR(x, y,false);
 
                 }
                 else if(IsDesiredID(map.GetValue(x, y), GameManager.instance.p1TowerID))
@@ -96,28 +96,27 @@ public class MapMGR : MonoBehaviour
         Vector2Int pos = new Vector2Int(x,y);
 
         GameObject brickYardGO = Instantiate(brickYardPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
-        //BrickYard brickYard = brickYardGO.GetComponent<BrickYard>(); //BrickYardがMonoでないため取得できない
-        BrickYard brickYard = new BrickYard();
+        BrickYardMGR brickYardMGR = brickYardGO.GetComponent<BrickYardMGR>(); 
 
-        map.AddBrickYard(pos,brickYard);
+        map.AddBrickYardMGR(pos,brickYardMGR);
 
 
     }
-    private void PlaceSpawnPoint(int x, int y, bool isP1)
+    private void PlaceSpawnPointMGR(int x, int y, bool isP1)
     {
         Vector2Int pos = new Vector2Int(x, y);
 
-        GameObject spwanPointGO = Instantiate(spawnPointPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
-        SpawnPoint spawnPoint = new SpawnPoint();
+        GameObject spwanPointGO = Instantiate(SpawnPointPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+        SpawnPointMGR spawnPointMGR = spwanPointGO.GetComponent<SpawnPointMGR>();
 
         if (isP1)
         {
-            map.AddP1SpawnPoint(pos, spawnPoint);
+            map.AddP1SpawnPointMGR(pos, spawnPointMGR);
 
         }
         else
         {
-            map.AddP1SpawnPoint(pos,spawnPoint);
+            map.AddP1SpawnPointMGR(pos,spawnPointMGR);
         }
     }
     private void PlaceTower(int x, int y, bool isP1)
@@ -125,16 +124,16 @@ public class MapMGR : MonoBehaviour
         Vector2Int pos = new Vector2Int(x, y);
 
         GameObject towerGO = Instantiate(towerPrefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
-        Tower tower = new Tower();
+        TowerMGR towerMGR = towerGO.GetComponent<TowerMGR>();
 
         if (isP1)
         {
-            map.AddP1Tower(pos, tower);
+            map.AddP1Tower(pos, towerMGR);
 
         }
         else
         {
-            map.AddP2Tower(pos, tower);
+            map.AddP2Tower(pos, towerMGR);
         }
     }
 
@@ -206,7 +205,7 @@ public class MapMGR : MonoBehaviour
 }
 
 
-public class Map : EntityMap<global::Entity>
+public class Map : EntityMap<global::EntityMGR>
 {
     //MapMGRに沿うように改良されたEntityMap
 
@@ -214,8 +213,8 @@ public class Map : EntityMap<global::Entity>
     const int entityNum = 5; //マップに配置されうるものの種類(下のEIの種類数と同じ)
     //これらはEntityMapで使用されるので重複がなければ値は自由
     const int brickYard_EI = 0; //EI = Entity Index
-    const int p1SpawnPoint_EI = 1;
-    const int p2SpawnPoint_EI = 2;
+    const int p1SpawnPointMGR_EI = 1;
+    const int p2SpawnPointMGR_EI = 2;
     const int p1Tower_EI = 3;
     const int p2Tower_EI = 4;
 
@@ -237,46 +236,46 @@ public class Map : EntityMap<global::Entity>
 
     //Setter
 
-    public void AddBrickYard(Vector2Int vector, BrickYard entity)
+    public void AddBrickYardMGR(Vector2Int vector, BrickYardMGR entity)
     {
         AddEntity(vector.x, vector.y, brickYard_EI, entity);
     }
-    public void RemoveBrickYard(Vector2Int vector, BrickYard entity)
+    public void RemoveBrickYardMGR(Vector2Int vector, BrickYardMGR entity)
     {
         RemoveEntity(vector.x, vector.y, brickYard_EI, entity);
     }
 
-    public void AddP1SpawnPoint(Vector2Int vector, SpawnPoint entity)
+    public void AddP1SpawnPointMGR(Vector2Int vector, SpawnPointMGR entity)
     {
-        AddEntity(vector.x, vector.y, p1SpawnPoint_EI, entity);
+        AddEntity(vector.x, vector.y, p1SpawnPointMGR_EI, entity);
     }
-    public void AddP2SpawnPoint(Vector2Int vector, SpawnPoint entity)
+    public void AddP2SpawnPointMGR(Vector2Int vector, SpawnPointMGR entity)
     {
-        AddEntity(vector.x, vector.y, p2SpawnPoint_EI, entity);
-    }
-
-    public void RemoveP1SpawnPoint(Vector2Int vector, SpawnPoint entity)
-    {
-        RemoveEntity(vector.x, vector.y, p1SpawnPoint_EI, entity);
-    }
-    public void RemoveP2SpawnPoint(Vector2Int vector, SpawnPoint entity)
-    {
-        RemoveEntity(vector.x, vector.y, p2SpawnPoint_EI, entity);
+        AddEntity(vector.x, vector.y, p2SpawnPointMGR_EI, entity);
     }
 
-    public void AddP1Tower(Vector2Int vector, Tower entity)
+    public void RemoveP1SpawnPointMGR(Vector2Int vector, SpawnPointMGR entity)
+    {
+        RemoveEntity(vector.x, vector.y, p1SpawnPointMGR_EI, entity);
+    }
+    public void RemoveP2SpawnPointMGR(Vector2Int vector, SpawnPointMGR entity)
+    {
+        RemoveEntity(vector.x, vector.y, p2SpawnPointMGR_EI, entity);
+    }
+
+    public void AddP1Tower(Vector2Int vector, TowerMGR entity)
     {
         AddEntity(vector.x, vector.y, p1Tower_EI, entity);
     }
-    public void AddP2Tower(Vector2Int vector, Tower entity)
+    public void AddP2Tower(Vector2Int vector, TowerMGR entity)
     {
         AddEntity(vector.x, vector.y, p2Tower_EI, entity);
     }
-    public void RemoveP1Tower(Vector2Int vector, Tower entity)
+    public void RemoveP1Tower(Vector2Int vector, TowerMGR entity)
     {
         RemoveEntity(vector.x, vector.y, p1Tower_EI, entity);
     }
-    public void RemoveP2Tower(Vector2Int vector, Tower entity)
+    public void RemoveP2Tower(Vector2Int vector, TowerMGR entity)
     {
         RemoveEntity(vector.x, vector.y, p2Tower_EI, entity);
     }

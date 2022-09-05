@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BrickYardMGR : MonoBehaviour
+public class BrickYardMGR : EntityMGR
 {
     // Start is called before the first frame update
     void Start()
@@ -15,9 +15,4 @@ public class BrickYardMGR : MonoBehaviour
     {
         
     }
-}
-
-public class BrickYard : Entity
-{
-
 }

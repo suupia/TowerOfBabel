@@ -354,6 +354,9 @@ MonoBehaviour:
     - {fileID: 11400000, guid: b7276cb5969e4344cb1ef9e357c6a3d7, type: 2}
     - {fileID: 11400000, guid: 16b6d52c18b8f064085b2ca17aef68d2, type: 2}
     - {fileID: 11400000, guid: 67abda8612a6cc442b7cf22602b1c187, type: 2}
+  brickYardPrefab: {fileID: 7506700713716196524, guid: 56ed420766958954fb4dd53f450bc223, type: 3}
+  SpawnPointPrefab: {fileID: 7506700713716196524, guid: ca35a0a3c9d0cf84ba444ab832153124, type: 3}
+  towerPrefab: {fileID: 7506700713716196524, guid: d05f58c3dbdd34947a4c5eeced2ab598, type: 3}
 --- !u!1 &294105814
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,7 +470,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294105814}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
