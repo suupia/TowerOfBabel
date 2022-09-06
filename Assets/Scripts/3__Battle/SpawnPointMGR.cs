@@ -29,9 +29,14 @@ public class SpawnPointMGR : EntityMGR
 
     private void SpawnUnit()
     {
-        Vector3 spawnPos = transform.position;
-        GameObject unitGO = Instantiate(unitPrefab, spawnPos, Quaternion.identity, unitParent.transform);
+        Vector2Int spawnPos = ToGridPos();
+        GameObject unitGO = Instantiate(unitPrefab, transform.position, Quaternion.identity, unitParent.transform);
         UnitMGR unitMGR = unitGO.GetComponent<UnitMGR>();
+
+        //数値データ
+        GameManager.instance.battleMGR.mapMGR.GetMap().MultiplySetValue(spawnPos,GameManager.instance.p1UnitID);
+        //スクリプト
+        GameManager.instance.battleMGR.mapMGR.GetMap().AddP1UnitMGR(spawnPos, unitMGR);
 
     }
 

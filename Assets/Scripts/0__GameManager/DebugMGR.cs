@@ -17,8 +17,8 @@ public class DebugMGR : MonoBehaviour
     public void DebugMapCoordinate()
     {
         Debug.Log($"DebugMapCoordinateを実行します");
-        int mapWidth = GameManager.instance.battleMGR.mapMGR.GetMapWidth();
-        int mapHeight = GameManager.instance.battleMGR.mapMGR.GetMapHeight();
+        int mapWidth = GameManager.instance.battleMGR.mapMGR.GetMap().GetWidth();
+        int mapHeight = GameManager.instance.battleMGR.mapMGR.GetMap().GetHeight();
         GameObject textGO;
 
         //行でループのあと、列のループをする

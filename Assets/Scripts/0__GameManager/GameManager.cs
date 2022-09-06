@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public BattleMGR battleMGR;
     [SerializeField] public ResultMGR resultMGR;
 
+    [SerializeField] public int gameSpeed = 1;
+
     //ID
     public readonly int wallID_m1 = -1;
     public readonly int groundID_p1 = 1;
@@ -26,8 +28,9 @@ public class GameManager : MonoBehaviour
     public readonly int p2SpawnPointID = 13;
     public readonly int p1TowerID = 17;
     public readonly int p2TowerID = 19;
-    public readonly int p1CharacterID = 2;
-    public readonly int p2CharacterID = 3;
+    public readonly int p1UnitID = 2;
+    public readonly int p2UnitID = 3;
+
 
 
 

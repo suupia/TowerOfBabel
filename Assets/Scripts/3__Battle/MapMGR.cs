@@ -129,12 +129,12 @@ public class MapMGR : MonoBehaviour
 
         if (isP1)
         {
-            map.AddP1Tower(pos, towerMGR);
+            map.AddP1TowerMGR(pos, towerMGR);
 
         }
         else
         {
-            map.AddP2Tower(pos, towerMGR);
+            map.AddP2TowerMGR(pos, towerMGR);
         }
     }
 
@@ -202,16 +202,26 @@ public class MapMGR : MonoBehaviour
     }
 
     //Getter
-    public int GetMapWidth()
+    public Map GetMap()
     {
-        return map.GetWidth();
+        return map;
     }
-    public int GetMapHeight()
+    //Setter
+    public void DivisionalSetMapValue(Vector2Int pos, int value)
     {
-        return map.GetHeight();
+        map.DivisionalSetValue(pos, value);
     }
-    public long GetMapValue(Vector2Int vector){
-        return map.GetValue(vector);
+    public void MultiplySetMapValue(Vector2Int pos, int value)
+    {
+        map.MultiplySetValue(pos, value);
+    }
+    public void RemoveP1Unit(Vector2Int pos, UnitMGR unitMGR)
+    {
+        map.RemoveP1UnitMGR(pos, unitMGR);
+    }
+    public void RemoveP2Unit(Vector2Int pos, UnitMGR unitMGR)
+    {
+        map.RemoveP2UnitMGR(pos, unitMGR);
     }
 }
 
@@ -221,13 +231,15 @@ public class Map : EntityMap<global::EntityMGR>
     //MapMGRに沿うように改良されたEntityMap
 
 
-    const int entityNum = 5; //マップに配置されうるものの種類(下のEIの種類数と同じ)
+    const int entityNum = 6; //マップに配置されうるものの種類(下のEIの種類数と同じ)
     //これらはEntityMapで使用されるので重複がなければ値は自由
     const int brickYard_EI = 0; //EI = Entity Index
     const int p1SpawnPointMGR_EI = 1;
     const int p2SpawnPointMGR_EI = 2;
     const int p1Tower_EI = 3;
     const int p2Tower_EI = 4;
+    const int p1Unit_EI = 5;
+    const int p2Unit_EI = 6;
 
 
 
@@ -274,21 +286,37 @@ public class Map : EntityMap<global::EntityMGR>
         RemoveEntity(vector.x, vector.y, p2SpawnPointMGR_EI, entity);
     }
 
-    public void AddP1Tower(Vector2Int vector, TowerMGR entity)
+    public void AddP1TowerMGR(Vector2Int vector, TowerMGR entity)
     {
         AddEntity(vector.x, vector.y, p1Tower_EI, entity);
     }
-    public void AddP2Tower(Vector2Int vector, TowerMGR entity)
+    public void AddP2TowerMGR(Vector2Int vector, TowerMGR entity)
     {
         AddEntity(vector.x, vector.y, p2Tower_EI, entity);
     }
-    public void RemoveP1Tower(Vector2Int vector, TowerMGR entity)
+    public void RemoveP1TowerMGR(Vector2Int vector, TowerMGR entity)
     {
         RemoveEntity(vector.x, vector.y, p1Tower_EI, entity);
     }
-    public void RemoveP2Tower(Vector2Int vector, TowerMGR entity)
+    public void RemoveP2ToweMGRr(Vector2Int vector, TowerMGR entity)
     {
         RemoveEntity(vector.x, vector.y, p2Tower_EI, entity);
+    }
+    public void AddP1UnitMGR(Vector2Int vector, UnitMGR entity)
+    {
+        AddEntity(vector.x, vector.y, p1Unit_EI, entity);
+    }
+    public void AddP2UnitMGR(Vector2Int vector, UnitMGR entity)
+    {
+        AddEntity(vector.x, vector.y, p2Unit_EI, entity);
+    }
+    public void RemoveP1UnitMGR(Vector2Int vector, UnitMGR entity)
+    {
+        RemoveEntity(vector.x, vector.y, p1Unit_EI, entity);
+    }
+    public void RemoveP2UnitMGR(Vector2Int vector, UnitMGR entity)
+    {
+        RemoveEntity(vector.x, vector.y, p2Unit_EI, entity);
     }
 }
 

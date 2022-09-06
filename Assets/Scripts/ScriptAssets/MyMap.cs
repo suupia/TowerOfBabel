@@ -243,7 +243,7 @@ public class EntityMap<EntityType> : NumericMap
         }
         entityMaps[entityIndex][ToSubscript(x, y)].Remove(entity);
     }
-    public void RemoveUnit(Vector2Int vector, int entityIndex, EntityType entity)
+    public void RemoveEntity(Vector2Int vector, int entityIndex, EntityType entity)
     {
         RemoveEntity(vector.x, vector.y, entityIndex, entity);
     }
