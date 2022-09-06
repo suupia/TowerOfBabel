@@ -39,5 +39,9 @@ public class BrickYardMGR : EntityMGR
         {
             //何もしない
         }
+
+
+        inputMGR.SetBrickYardPos(mouseGridPos);
+
     }
 }

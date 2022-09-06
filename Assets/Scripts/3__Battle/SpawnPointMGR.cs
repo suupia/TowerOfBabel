@@ -20,7 +20,7 @@ public class SpawnPointMGR : EntityMGR
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SpawnUnit();
+            //SpawnUnit();
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -44,7 +44,7 @@ public class SpawnPointMGR : EntityMGR
         }
     }
 
-    private void SpawnUnit()
+    public void SpawnUnit(Vector2Int brickYardPos, Vector2Int towerPos)
     {
         Vector2Int spawnPos = TwoDIM.ToGridPos(transform.position);
         GameObject unitGO = Instantiate(unitPrefab, transform.position, Quaternion.identity, unitParent.transform);
@@ -56,19 +56,17 @@ public class SpawnPointMGR : EntityMGR
         GameManager.instance.battleMGR.mapMGR.GetMap().AddP1UnitMGR(spawnPos, unitMGR);
 
         //初期化
-        unitMGR.Init();
+        unitMGR.Init(brickYardPos,towerPos);
 
     }
 
     public override  void OnClicked(bool isP1)
     {
-        Vector2 mousePos;
-        Vector2Int mouseGridPos;
 
         if (inputMGR.GetStep() != InputMGR.Step.Idle) return;
 
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseGridPos = TwoDIM.ToGridPos(mousePos);
+       Vector2 mousePos   = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+       Vector2Int  mouseGridPos = TwoDIM.ToGridPos(mousePos);
 
 
         Debug.Log($"mouseGridPos:{mouseGridPos}, gridPos:{gridPos}");
@@ -83,6 +81,8 @@ public class SpawnPointMGR : EntityMGR
         {
             //何もしない
         }
+
+        inputMGR.SetSpawnPos(mouseGridPos);
     }
 
 }

@@ -36,7 +36,7 @@ public class UnitMGR : EntityMGR
     {
         if(isOnMoveAlongWith) MoveAlongWith();
     }
-    public  void Init()
+    public  void Init(Vector2Int brickYardPos, Vector2Int towerPos)
     {
         EntityInit();
 
@@ -44,11 +44,11 @@ public class UnitMGR : EntityMGR
 
         moveTime = 1.0f / spd;
 
-        DecideRoute();
+        DecideRoute(brickYardPos,towerPos);
         isOnMoveAlongWith = true;
     }
 
-    private void DecideRoute()
+    private void DecideRoute(Vector2Int brickYardPos, Vector2Int towerPos)
     {
         Vector2Int startPos;
         Vector2Int endPos;
@@ -59,8 +59,20 @@ public class UnitMGR : EntityMGR
         int mapWidth = GameManager.instance.battleMGR.mapMGR.GetMap().GetWidth();
         int mapHeight = GameManager.instance.battleMGR.mapMGR.GetMap().GetHeight();
 
+        //routeList = WaveletSearch.DiagonalSearchShortestRoute(startPos, endPos, WaveletSearch.OrderInDirection.LeftDown, mapWidth, mapHeight, 2, (vector, wallID) => { return GameManager.instance.battleMGR.mapMGR.GetMap().GetValue(vector) < 0 ? true : false; });
 
-      routeList =  WaveletSearch.DiagonalSearchShortestRoute(startPos, endPos, WaveletSearch.OrderInDirection.LeftDown, mapWidth, mapHeight, 2, (vector, wallID) => { return GameManager.instance.battleMGR.mapMGR.GetMap().GetValue(vector) < 0 ? true : false; });
+        routeList = WaveletSearch.DiagonalSearchShortestRoute(startPos, brickYardPos, WaveletSearch.OrderInDirection.LeftDown, mapWidth, mapHeight, 2, (vector, wallID) => { return GameManager.instance.battleMGR.mapMGR.GetMap().GetValue(vector) < 0 ? true : false; });
+        routeList.RemoveAt(routeList.Count - 1); //BrickYardがあるマスには行かない
+        Debug.LogWarning($"brickYardPosまでのルート:{string.Join(",", routeList)}");
+        Vector2Int halfPos = routeList[routeList.Count - 1];
+            routeList.RemoveAt(routeList.Count - 1); //連結のために削除する必要がある
+        routeList.AddRange(WaveletSearch.DiagonalSearchShortestRoute(halfPos, towerPos, WaveletSearch.OrderInDirection.LeftDown, mapWidth, mapHeight, 2, (vector, wallID) => { return GameManager.instance.battleMGR.mapMGR.GetMap().GetValue(vector) < 0 ? true : false; }));
+        routeList.RemoveAt(routeList.Count - 1); //Towerがあるマスには行かない
+        Debug.LogWarning($"towerPosまでのルート:{string.Join(",", routeList)}");
+
+
+
+
     }
 
     protected virtual void March() //Update()で呼ばれることに注意
@@ -188,7 +200,7 @@ public class UnitMGR : EntityMGR
         startPos = transform.position;
         endPos = startPos + GetDirectionVector();
 
-        Debug.Log($"MoveForwardCoroutineにおいてstartPos:{startPos},endPos{endPos}");
+        //Debug.Log($"MoveForwardCoroutineにおいてstartPos:{startPos},endPos{endPos}");
 
 
         float remainingDistance = (endPos - startPos).sqrMagnitude;
@@ -211,7 +223,7 @@ public class UnitMGR : EntityMGR
 
 
         isMoving = false;
-        Debug.Log($"MoveCoroutine()終了時のendPosは{endPos}");
+        //Debug.Log($"MoveCoroutine()終了時のendPosは{endPos}");
     }
 
     private void MoveData(Vector2Int directionVector)

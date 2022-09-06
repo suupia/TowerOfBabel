@@ -7,6 +7,17 @@ public class InputMGR : MonoBehaviour
     MapMGR mapMGR;
 
     bool isP1;
+
+
+    SpawnPointMGR spawnPointMGR;
+    Vector2Int spawnPos;
+    Vector2Int brickYardPos;
+    Vector2Int towerPos;
+
+
+    //仮置き
+    bool isFristSpawn = true;
+
     public enum Step
     {
         Idle,
@@ -20,9 +31,13 @@ public class InputMGR : MonoBehaviour
 
     private void Update()
     {
+        ClickEntity();
 
+       
+    }
 
-
+    private void ClickEntity()
+    {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int mouseGridPos = TwoDIM.ToGridPos(mousePos);
 
@@ -35,11 +50,13 @@ public class InputMGR : MonoBehaviour
                 {
                     if (isP1 && mapMGR.GetMap().IDisExit(mouseGridPos, GameManager.instance.p1SpawnPointID))
                     {
-                        mapMGR.GetMap().GetP1SpawnPointMGR(mouseGridPos).OnClicked(isP1);
+                        spawnPointMGR =  mapMGR.GetMap().GetP1SpawnPointMGR(mouseGridPos);
+                        spawnPointMGR.OnClicked(isP1);
                     }
                     else if (!isP1 && mapMGR.GetMap().IDisExit(mouseGridPos, GameManager.instance.p2SpawnPointID))
                     {
-                        mapMGR.GetMap().GetP2SpawnPointMGR(mouseGridPos).OnClicked(isP1);
+                        spawnPointMGR = mapMGR.GetMap().GetP2SpawnPointMGR(mouseGridPos);
+                        spawnPointMGR.OnClicked(isP1);
                     }
                     else
                     {
@@ -78,6 +95,7 @@ public class InputMGR : MonoBehaviour
                 }
                 break;
             case Step.SelectTower:
+                SpawnUnit();
                 break;
         }
     }
@@ -87,6 +105,16 @@ public class InputMGR : MonoBehaviour
         mapMGR = GameManager.instance.battleMGR.mapMGR;
 
        this. isP1 = isP1;
+    }
+
+    private void SpawnUnit()
+    {
+        if (isFristSpawn)
+        {
+            spawnPointMGR.SpawnUnit(brickYardPos, towerPos);
+
+            isFristSpawn = false;
+        }
     }
 
 
@@ -106,7 +134,6 @@ public class InputMGR : MonoBehaviour
     }
     public void SelectTowerStep()
     {
-
         step=Step.SelectTower;
     }
 
@@ -114,5 +141,19 @@ public class InputMGR : MonoBehaviour
     public Step GetStep()
     {
         return step;
+    }
+
+    //Setter
+    public void SetSpawnPos(Vector2Int pos)
+    {
+        spawnPos = pos;
+    }
+    public void SetBrickYardPos(Vector2Int pos)
+    {
+        brickYardPos = pos;
+    }
+    public void SetTowerPos(Vector2Int pos)
+    {
+        towerPos = pos;
     }
 }

@@ -619,8 +619,8 @@ public static class WaveletSearch
         }
         if (InspectPosIsWallID(endPos,wallID))
         {
-            Debug.LogError("SearchShortestRouteのendPosにwallIDが含まれています");
-            return null;
+            //Debug.LogError("SearchShortestRouteのendPosにwallIDが含まれています");
+            //return null;
         }
 
 

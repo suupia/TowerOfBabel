@@ -45,5 +45,8 @@ public class TowerMGR : EntityMGR
         {
             //何もしない
         }
+
+        inputMGR.SetTowerPos(mouseGridPos);
+
     }
 }
