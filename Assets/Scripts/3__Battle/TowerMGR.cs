@@ -4,15 +4,46 @@ using UnityEngine;
 
 public class TowerMGR : EntityMGR
 {
-    // Start is called before the first frame update
-    void Start()
+    InputMGR inputMGR;
+
+    public void Init(bool isP1)
     {
-        
+        EntityInit();
+
+        if (isP1)
+        {
+            inputMGR = GameManager.instance.battleMGR.p1InputMGR;
+
+        }
+        else
+        {
+            inputMGR = GameManager.instance.battleMGR.p2InputMGR;
+
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnClicked( bool isP1)
     {
-        
+        Vector2 mousePos;
+        Vector2Int mouseGridPos;
+
+
+        if (inputMGR.GetStep() != InputMGR.Step.SelectBrickYard) return;
+
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseGridPos = TwoDIM.ToGridPos(mousePos);
+
+
+        Debug.Log($"mouseGridPos:{mouseGridPos}, gridPos:{gridPos}");
+
+        if (mouseGridPos.Equals(gridPos))
+        {
+            inputMGR.SelectTowerStep();
+
+        }
+        else
+        {
+            //何もしない
+        }
     }
 }

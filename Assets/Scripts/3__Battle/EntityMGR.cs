@@ -4,9 +4,12 @@ using UnityEngine;
 
 public abstract class EntityMGR : MonoBehaviour
 {
-    //Getter
-    public Vector2Int ToGridPos()
+    protected Vector2Int gridPos;
+
+    protected void EntityInit()
     {
-        return TwoDIM.ToGridPos(transform.position);
+        gridPos = TwoDIM.ToGridPos(transform.position); 
     }
+
+    public abstract void OnClicked(bool isP1);
 }

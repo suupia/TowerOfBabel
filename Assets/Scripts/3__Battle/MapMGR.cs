@@ -101,6 +101,7 @@ public class MapMGR : MonoBehaviour
 
         map.AddBrickYardMGR(pos,brickYardMGR);
 
+        brickYardMGR.Init();
 
     }
     private void PlaceSpawnPointMGR(int x, int y, bool isP1)
@@ -113,11 +114,14 @@ public class MapMGR : MonoBehaviour
         if (isP1)
         {
             map.AddP1SpawnPointMGR(pos, spawnPointMGR);
+            spawnPointMGR.Init(isP1);
 
         }
         else
         {
-            map.AddP1SpawnPointMGR(pos,spawnPointMGR);
+            map.AddP2SpawnPointMGR(pos,spawnPointMGR);
+            spawnPointMGR.Init(isP1);
+
         }
     }
     private void PlaceTower(int x, int y, bool isP1)
@@ -130,11 +134,14 @@ public class MapMGR : MonoBehaviour
         if (isP1)
         {
             map.AddP1TowerMGR(pos, towerMGR);
+            towerMGR.Init(isP1);
 
         }
         else
         {
             map.AddP2TowerMGR(pos, towerMGR);
+            towerMGR.Init(isP1);
+
         }
     }
 
@@ -207,22 +214,22 @@ public class MapMGR : MonoBehaviour
         return map;
     }
     //Setter
-    public void DivisionalSetMapValue(Vector2Int pos, int value)
-    {
-        map.DivisionalSetValue(pos, value);
-    }
-    public void MultiplySetMapValue(Vector2Int pos, int value)
-    {
-        map.MultiplySetValue(pos, value);
-    }
-    public void RemoveP1Unit(Vector2Int pos, UnitMGR unitMGR)
-    {
-        map.RemoveP1UnitMGR(pos, unitMGR);
-    }
-    public void RemoveP2Unit(Vector2Int pos, UnitMGR unitMGR)
-    {
-        map.RemoveP2UnitMGR(pos, unitMGR);
-    }
+    //public void DivisionalSetMapValue(Vector2Int pos, int value)
+    //{
+    //    map.DivisionalSetValue(pos, value);
+    //}
+    //public void MultiplySetMapValue(Vector2Int pos, int value)
+    //{
+    //    map.MultiplySetValue(pos, value);
+    //}
+    //public void RemoveP1Unit(Vector2Int pos, UnitMGR unitMGR)
+    //{
+    //    map.RemoveP1UnitMGR(pos, unitMGR);
+    //}
+    //public void RemoveP2Unit(Vector2Int pos, UnitMGR unitMGR)
+    //{
+    //    map.RemoveP2UnitMGR(pos, unitMGR);
+    //}
 }
 
 
@@ -251,10 +258,40 @@ public class Map : EntityMap<global::EntityMGR>
         _stageIndex = stageIndex;
     }
 
+    public bool IDisExit(Vector2Int pos, int desiredID)
+    {
+        return Mathf.Abs(GetValue(pos)) % desiredID == 0 ? true : false;
+    }
+
+    public bool IsOutOfMap(Vector2Int pos)
+    {
+      return  IsOutOfDataRange(pos.x, pos.y);
+    } 
+
     //Getter
     public int GetStageIndex()
     {
         return _stageIndex;
+    }
+    public BrickYardMGR GetBrickYardMGR(Vector2Int pos)
+    {
+        return (BrickYardMGR)GetEntityList(pos, brickYard_EI)[0];
+    }
+    public SpawnPointMGR GetP1SpawnPointMGR(Vector2Int pos)
+    {
+        return (SpawnPointMGR)GetEntityList(pos, p1SpawnPointMGR_EI)[0];
+    }
+    public SpawnPointMGR GetP2SpawnPointMGR(Vector2Int pos)
+    {
+        return (SpawnPointMGR)GetEntityList(pos, p2SpawnPointMGR_EI)[0];
+    }
+    public TowerMGR GetP1TowerMGR(Vector2Int pos)
+    {
+        return (TowerMGR)GetEntityList(pos, p1Tower_EI)[0];
+    }
+    public TowerMGR GetP2TowerMGR(Vector2Int pos)
+    {
+        return (TowerMGR)GetEntityList(pos, p2Tower_EI)[0];
     }
 
     //Setter

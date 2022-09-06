@@ -4,15 +4,40 @@ using UnityEngine;
 
 public class BrickYardMGR : EntityMGR
 {
-    // Start is called before the first frame update
-    void Start()
+    InputMGR inputMGR;
+
+    public void Init()
     {
-        
+        EntityInit();
+
+
+        //とりあえず、プレイヤー1だけの操作を書く
+        inputMGR = GameManager.instance.battleMGR.p1InputMGR;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnClicked(bool isP1)
     {
-        
+        Vector2 mousePos;
+        Vector2Int mouseGridPos;
+
+        //とりあえず、プレイヤー1だけの操作を書く
+
+        if (inputMGR.GetStep() != InputMGR.Step.SelectSpawnPoint) return;
+
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseGridPos = TwoDIM.ToGridPos(mousePos);
+
+
+        Debug.Log($"mouseGridPos:{mouseGridPos}, gridPos:{gridPos}");
+
+        if (mouseGridPos.Equals(gridPos))
+        {
+            inputMGR.SelectBrickYardStep();
+
+        }
+        else
+        {
+            //何もしない
+        }
     }
 }

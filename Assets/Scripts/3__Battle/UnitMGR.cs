@@ -8,7 +8,6 @@ public class UnitMGR : EntityMGR
 
     protected Animator animator;
 
-    Vector2Int gridPos;
     List<Vector2Int> routeList;
     bool isMoving;
 
@@ -32,22 +31,21 @@ public class UnitMGR : EntityMGR
     //仮置き
     bool isOnMoveAlongWith;
 
-    private void Start()
-    {
-        Init();
-        DecideRoute();
-        isOnMoveAlongWith = true;   
-    }
+
     private void Update()
     {
         if(isOnMoveAlongWith) MoveAlongWith();
     }
-    private void Init()
+    public  void Init()
     {
+        EntityInit();
+
         animator = this.gameObject.GetComponent<Animator>();
 
-        gridPos = TwoDIM.ToGridPos(transform.position);
         moveTime = 1.0f / spd;
+
+        DecideRoute();
+        isOnMoveAlongWith = true;
     }
 
     private void DecideRoute()
@@ -248,6 +246,11 @@ public class UnitMGR : EntityMGR
         //gridPosを移動させる。これは最後に行うことに注意！
         gridPos += directionVector;
 
+    }
+
+    public override void OnClicked(bool isP1)
+    {
+        //何もしない
     }
 
     //Getter

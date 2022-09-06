@@ -80,6 +80,10 @@ public class GameManager : MonoBehaviour
         //Debug.Log($"stageNum;{i}");
         //Debug.Log(string.Join(",", myMapDataArray[i].values));
     }
+
+
+
+    //Stateを変更する関数
     public void TitleState()
     {
 
